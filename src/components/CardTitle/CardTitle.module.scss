@@ -1,0 +1,15 @@
+@import "src/sharedStyle/SharedStyle.module";
+
+.cardTitleWrapper {
+  width: 100%;
+  box-shadow: $boxShadow;
+  padding: 4px 8px;
+  margin: 4px 0;
+
+
+  &:hover {
+    box-shadow: $hoverBoxShadow;
+    cursor: pointer;
+  }
+
+}

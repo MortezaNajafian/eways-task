@@ -1,26 +1,65 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, {useCallback, useState} from "react";
+import data from "./posts.json";
+import Card from "./components/Card/Card";
+import s from './App.module.scss'
+import {groupBy, debounce} from 'lodash'
+import {Input} from "./BaseComponents";
+import IData from "./models/IData";
+import ModalContext from "./contexts/ModalContext";
+import Modal from "./BaseComponents/Modal/Modal";
+import ModalContent from "./components/ModalContent/ModalContent";
+import IUser from "./models/IUser";
+
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+
+    const shapedData: IUser[] = data
+    const groupedData: IData = groupBy(shapedData, (item) => item.userId)
+    const [searchValue, setSearchValue] = useState('')
+    const [visibleModal, setVisibleModal] = useState<boolean>(false);
+    const [selectedId, setSelectedId] = useState<undefined | number>(undefined);
+
+
+
+
+    const filteredUsersByTitle = useCallback(
+        () => {
+            const data: IData = {}
+            Object.keys(groupedData).forEach((userId) => {
+                data[userId] = groupedData[userId].filter(user => user.title.includes(searchValue))
+            })
+            return data
+        }
+        ,
+        [searchValue],
+    );
+
+
+    const onChangeSearchValue = debounce((value: string) => {
+        setSearchValue(value)
+    }, 100)
+
+
+    return (
+        <ModalContext.Provider
+            value={{visible: visibleModal, setVisible: setVisibleModal, selectedId, setSelectedId}}>
+            <div className={s.appWrapper}>
+                <div className={s.searchSection}>
+                    <span>Search Term :</span>
+                    <Input onChange={onChangeSearchValue}
+                           className="border-black border rounded-lg outline-none focus:border-blue-600 p-2"/>
+                </div>
+                <div className={s.cards}>
+                    {Object.keys(filteredUsersByTitle()).map(userId => ((
+                        <Card userData={filteredUsersByTitle()[userId]} key={userId}/>)))}
+                </div>
+                <Modal>
+                    <ModalContent shapedData={shapedData} />
+                </Modal>
+            </div>
+        </ModalContext.Provider>
+
+    );
 }
 
 export default App;
