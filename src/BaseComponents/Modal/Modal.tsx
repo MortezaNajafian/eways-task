@@ -5,9 +5,10 @@ import ModalContext from "../../contexts/ModalContext";
 
 interface IModalProps {
     children?: ReactNode
+    dataTest?: string
 }
 
-const Modal: FC<IModalProps> = ({children}) => {
+const Modal: FC<IModalProps> = ({children,dataTest}) => {
 
 
     const {visible, setVisible} = useContext(ModalContext);
@@ -19,14 +20,14 @@ const Modal: FC<IModalProps> = ({children}) => {
 
 
     const ModalElement = <div className={`${s.modalWrapper} ${!visible ? s.hide : s.show}`}
-                              onClick={closeModal}>
+                              onClick={closeModal} data-test={dataTest}>
 
         <div className={s.body} onClick={(event) => {
             event.stopPropagation()
         }
         }>
             <div className={s.header}>
-                <div className={s.closeButton} onClick={closeModal}/>
+                <button className={s.closeButton}  onClick={closeModal} data-test="modal-close-button"/>
             </div>
             <div>{children}</div>
         </div>

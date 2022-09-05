@@ -3,10 +3,9 @@ import data from "./posts.json";
 import Card from "./components/Card/Card";
 import s from './App.module.scss'
 import {groupBy, debounce} from 'lodash'
-import {Input} from "./BaseComponents";
+import {Input, Modal} from "./BaseComponents";
 import IData from "./models/IData";
 import ModalContext from "./contexts/ModalContext";
-import Modal from "./BaseComponents/Modal/Modal";
 import ModalContent from "./components/ModalContent/ModalContent";
 import IUser from "./models/IUser";
 
@@ -18,8 +17,6 @@ function App() {
     const [searchValue, setSearchValue] = useState('')
     const [visibleModal, setVisibleModal] = useState<boolean>(false);
     const [selectedId, setSelectedId] = useState<undefined | number>(undefined);
-
-
 
 
     const filteredUsersByTitle = useCallback(
@@ -46,15 +43,15 @@ function App() {
             <div className={s.appWrapper}>
                 <div className={s.searchSection}>
                     <span>Search Term :</span>
-                    <Input onChange={onChangeSearchValue}
+                    <Input dataTest="search-input" onChange={onChangeSearchValue}
                            className="border-black border rounded-lg outline-none focus:border-blue-600 p-2"/>
                 </div>
-                <div className={s.cards}>
+                <div className={s.cards} data-test="app-cards">
                     {Object.keys(filteredUsersByTitle()).map(userId => ((
                         <Card userData={filteredUsersByTitle()[userId]} key={userId}/>)))}
                 </div>
-                <Modal>
-                    <ModalContent shapedData={shapedData} />
+                <Modal dataTest="app-modal">
+                    <ModalContent shapedData={shapedData}/>
                 </Modal>
             </div>
         </ModalContext.Provider>

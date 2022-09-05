@@ -19,7 +19,7 @@ const CardTitle: FC<ICardTitleProps> = ({title, id}) => {
 
 
     return (
-        <div className={s.cardTitleWrapper} onClick={openModal.bind(this, id)}>
+        <div className={s.cardTitleWrapper} onClick={openModal.bind(this, id)} data-test="card-title">
             {title}
         </div>
     );

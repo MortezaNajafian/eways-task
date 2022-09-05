@@ -14,8 +14,8 @@ const ModalContent: FC<IModalContentProps> = ({shapedData}) => {
 
     return (
         <div className={s.modalContentWrapper}>
-            <h2>{selectedData?.title}</h2>
-            <div>
+            <h2 data-test="modal-content-title">{selectedData?.title}</h2>
+            <div data-test="modal-content-body">
                 {selectedData?.body}
             </div>
         </div>

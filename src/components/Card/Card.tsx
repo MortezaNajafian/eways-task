@@ -10,7 +10,7 @@ interface ICardProps {
 
 const Card: FC<ICardProps> = ({ userData}) => {
     return (
-        <div className={s.cardWrapper}>
+        <div className={s.cardWrapper} data-test="app-card">
             {userData.map(user => (<CardTitle key={user.id} id={user.id} title={user.title}/>))}
         </div>
     );
